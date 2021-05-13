@@ -1,43 +1,36 @@
-from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QGroupBox, QLabel, QMainWindow, QScrollArea, QVBoxLayout
+from PyQt5.QtWidgets import QLabel, QMainWindow
 from libboutique.services.packagekit.packagekit_service import PackageKitService
 from libboutique.services.snap.snap_service import SnapService
-
 from Widgets import MainToolBar
+from Widgets.central_widget import CentralWidget
 
+import json
 
 
 class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
-        self.create_components()
         self.setMinimumSize(800, 450)
-    
+
+        self.create_components()
+        self.addListeners()
+        self.loadIndex()
+
     def create_components(self) -> None:
         self.toolbar = MainToolBar()
-        self.toolbar.add_listener(self.start_search)
         self.addToolBar(self.toolbar)
 
-        scroll_area = self.build_scroll_area()
-        self.setCentralWidget(scroll_area)
+        self.central_widget = CentralWidget()
+        self.setCentralWidget(self.central_widget)
 
-    def build_scroll_area(self) -> QScrollArea:
-        self.scroll_layout = QVBoxLayout()
+    def addListeners(self) -> None:
+        self.toolbar.onReturnPressed(self._startSearch)
 
-        for x in range(30):
-            label = QLabel(f"Line {x}")
-            self.scroll_layout.addWidget(label)
-        scroll_group = QGroupBox()
-        scroll_group.setLayout(self.scroll_layout)
+    def loadIndex(self) -> None:
+        with open('applications.json') as json_file:
+            self.index = json.load(json_file)
 
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(scroll_group)
-        scroll_area.setBackgroundRole(QPalette.Light)     
-
-        return scroll_area
-
-    def start_search(self) -> None:
+    def _startSearch(self) -> None:
         package_name = self.toolbar.search_field.text()
 
         snap_service = SnapService()
@@ -46,14 +39,9 @@ class MainWindow(QMainWindow):
         debs = package_kit_service.search_packages_by_name(package_name)
         packages = sorted(debs + snaps)
 
-        while self.scroll_layout.count():
-            item = self.scroll_layout.takeAt(0)
-            if item and item.widget():
-                item.widget().deleteLater()
-                self.scroll_layout.removeWidget(item.widget())
-        
+        self.central_widget.clear()
+
         for package in packages:
             print(package)
             label = QLabel(f"{package.name} {package.version}")
-            self.scroll_layout.addWidget(label)
-
+            self.central_widget.addWidget(label)
