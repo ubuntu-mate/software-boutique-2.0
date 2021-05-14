@@ -1,0 +1,4 @@
+[submodule "software-boutique-curated-apps"]
+	path = software-boutique-curated-apps
+	url = https://github.com/frenchguych/software-boutique-curated-apps.git
+	branch = structured_index
