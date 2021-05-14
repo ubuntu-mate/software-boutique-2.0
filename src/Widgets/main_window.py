@@ -5,6 +5,7 @@ from PyQt5.QtGui import QIcon, QPalette, QPixmap, QTextBlock
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QVBoxLayout, QWidget
 from libboutique.services.packagekit.packagekit_service import PackageKitService
 from libboutique.services.snap.snap_service import SnapService
+from Widgets.card import Card
 from Widgets.main_tool_bar import MainToolBar
 from Widgets.central_widget import CentralWidget
 
@@ -20,7 +21,8 @@ class MainWindow(QMainWindow):
         self.addListeners()
         self.loadIndex()
         self.setWindowTitle("Software Boutique")
-        self.setStyleSheet(open(os.path.join(os.path.dirname(__file__), '../../assets/css/boutique.css')).read())
+        self.setStyleSheet(open(os.path.join(os.path.dirname(
+            __file__), '../../assets/css/boutique.css')).read())
 
     def createComponents(self) -> None:
         self.toolbar = MainToolBar()
@@ -30,74 +32,31 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.central_widget)
 
     def addListeners(self) -> None:
-        self.toolbar.onReturnPressed(self._startSearch)
+        self.toolbar.onReturnPressed(self._search)
 
     def loadIndex(self) -> None:
         with open('software-boutique-curated-apps/dist/applications-en.json') as json_file:
             self.index = json.load(json_file)
-            self.index.pop('stats', None)
-            self.index.pop('supported', None)
-            self.index.pop('distro', None)
 
-    def _startSearch(self) -> None:
+    def _search(self) -> None:
         search_term = self.toolbar.search_field.text()
 
         self.central_widget.clear()
 
+        def matches(haystack, needle):
+            return haystack.lower().find(needle.lower()) > -1
+
         packages = [
             package
             for _, packages
-            in self.index.items()
+            in self.index['categories'].items()
             for _, package
             in packages.items()
-            if 
-                package["name"].lower().find(search_term.lower()) > -1 
-                or package["description"].lower().find(search_term.lower()) > -1
+            if
+            matches(package['name'], search_term)
+            or matches(package['description'], search_term)
         ]
 
         for package in packages:
-            package_name = package['name']
-            description = package['description']
-            icon = package['icon']
-
-            icon_widget = QLabel()
-            icon_pixmap = QPixmap(f"software-boutique-curated-apps/dist/{icon}")
-            icon_widget.setPixmap(icon_pixmap)
-            icon_widget.setFixedWidth(40 + icon_pixmap.width())
-            icon_widget.setContentsMargins(20, 20, 20, 20)
-
-            name_widget = QLabel(package_name)
-            name_widget.setStyleSheet("font-weight: 700;")
-
-            description_widget = QLabel(description)
-            description_widget.setWordWrap(True)
-
-            details_button = QPushButton("Details")
-
-            install_button = QPushButton("Install")
-            install_button.setObjectName("install-button")
-
-            buttons_box_layout = QHBoxLayout()
-            buttons_box_layout.addStretch()
-            buttons_box_layout.addWidget(details_button)
-            buttons_box_layout.addWidget(install_button)
-
-            buttons_box_widget = QWidget()
-            buttons_box_widget.setLayout(buttons_box_layout)
-
-            info_layout = QVBoxLayout()
-            info_layout.addWidget(name_widget)
-            info_layout.addWidget(description_widget)
-            info_layout.addWidget(buttons_box_widget)
-
-            info_group = QWidget()
-            info_group.setLayout(info_layout)
-
-            card_layout = QHBoxLayout()
-            card_layout.addWidget(icon_widget, 0, QtCore.Qt.AlignTop)
-            card_layout.addWidget(info_group, 0, QtCore.Qt.AlignTop)
-
-            card_widget = QWidget()
-            card_widget.setLayout(card_layout)
-
-            self.central_widget.addWidget(card_widget)
+            card = Card(package)
+            self.central_widget.addWidget(card)

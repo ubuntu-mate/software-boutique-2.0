@@ -17,3 +17,7 @@ QPushButton#install-button:hover {
 QPushButton#install-button:pressed {
     background-color: #668437;
 }
+
+QLabel#package-name {
+    font-weight: 700;
+}
