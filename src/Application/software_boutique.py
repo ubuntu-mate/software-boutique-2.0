@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication
-from Widgets import MainWindow
+from Widgets.main_window import MainWindow
 
 class SoftwareBoutique(QApplication):
     def __init__(self) -> None:

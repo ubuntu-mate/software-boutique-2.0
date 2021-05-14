@@ -1,0 +1,19 @@
+QPushButton#install-button {
+    background-color: #87a556;
+    border: none;
+    padding: 3px 16px;
+    border: 1px solid white;
+    border-radius: 3px;
+}
+
+QPushButton#install-button {
+    outline: none;
+}
+
+QPushButton#install-button:hover {
+    background-color: #92b161;
+}
+
+QPushButton#install-button:pressed {
+    background-color: #668437;
+}

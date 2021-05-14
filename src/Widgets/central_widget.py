@@ -10,9 +10,6 @@ class CentralWidget(QScrollArea):
 
     def createComponents(self) -> None:
         self.scroll_widget_layout = QVBoxLayout()
-        for x in range(30):
-            label = QLabel(f"Line {x}")
-            self.scroll_widget_layout.addWidget(label)
 
         scroll_widget = QWidget()
         scroll_widget.setLayout(self.scroll_widget_layout)
