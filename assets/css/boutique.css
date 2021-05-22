@@ -1,4 +1,4 @@
-QPushButton#install-button {
+QPushButton.install-button {
     background-color: #87a556;
     border: none;
     padding: 3px 16px;
@@ -6,18 +6,41 @@ QPushButton#install-button {
     border-radius: 3px;
 }
 
-QPushButton#install-button {
+QPushButton.install-button {
     outline: none;
 }
 
-QPushButton#install-button:hover {
+QPushButton.install-button:hover {
     background-color: #92b161;
 }
 
-QPushButton#install-button:pressed {
+QPushButton.install-button:pressed {
     background-color: #668437;
 }
 
-QLabel#package-name {
+QLabel.package-name {
     font-weight: 700;
+}
+
+#main-toolbar QToolButton {
+    color: #87a556;
+    padding: 2px;
+    margin: 5px 0px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+#main-toolbar QToolButton:checked,
+#main-toolbar QToolButton:pressed {
+    background-color: #87a556;
+    border: 1px solid #87a556;
+    color: white;
+}
+
+#main-toolbar QToolButton:pressed {
+    border: none;
+}
+
+Card {
+    border-bottom: 1px solid #506134;
 }

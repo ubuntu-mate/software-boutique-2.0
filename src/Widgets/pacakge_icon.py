@@ -1,10 +1,10 @@
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QLabel
+from PyQt5.QtWidgets import QLabel, QWidget
 
 
 class PackageIcon(QLabel):
-    def __init__(self, fileName: str, margin: int) -> None:
-        super().__init__()
+    def __init__(self, fileName: str, margin: int, parent: QWidget) -> None:
+        super().__init__(parent)
 
         icon_pixmap = QPixmap(f"software-boutique-curated-apps/dist/{fileName}")
         self.setPixmap(icon_pixmap)

@@ -6,19 +6,19 @@ from Widgets.package_buttons import PackageButtons
 
 class InfoPanel(QWidget):
 
-    def __init__(self, package_name: str, description: str) -> None:
-        super().__init__()
+    def __init__(self, package_name: str, description: str, parent: QWidget) -> None:
+        super().__init__(parent)
 
         self.createComponents(package_name, description)
 
     def createComponents(self, package_name: str, description: str) -> None:
-        name_widget = QLabel(package_name)
-        name_widget.setObjectName("package-name")
+        name_widget = QLabel(package_name, self)
+        name_widget.setProperty("class", "package-name")
 
-        description_widget = QLabel(description)
+        description_widget = QLabel(description, self)
         description_widget.setWordWrap(True)
 
-        self.package_buttons = PackageButtons()
+        self.package_buttons = PackageButtons(self)
 
         info_layout = QVBoxLayout()
         info_layout.addWidget(name_widget)

@@ -1,12 +1,15 @@
+from PyQt5 import QtCore
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QLineEdit
+from PyQt5.QtWidgets import QLineEdit, QWidget
 
 
 class SearchField(QLineEdit):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self, parent: QWidget) -> None:
+        super().__init__(parent)
 
         self.createComponents()
+
+        self.setAttribute(QtCore.Qt.WA_StyledBackground)
 
     def createComponents(self) -> None:
         self.setMaximumWidth(150)
