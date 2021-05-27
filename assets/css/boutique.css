@@ -1,13 +1,11 @@
-QPushButton.install-button {
-    background-color: #87a556;
-    border: none;
+QPushButton.package-button {
+    width: 100px;
     padding: 3px 16px;
-    border: 1px solid white;
-    border-radius: 3px;
+    outline: none;
 }
 
 QPushButton.install-button {
-    outline: none;
+    background-color: #87a556;
 }
 
 QPushButton.install-button:hover {
@@ -43,4 +41,16 @@ QLabel.package-name {
 
 Card {
     border-bottom: 1px solid #506134;
+}
+
+.row-item {
+    border-bottom-width: 3px;
+    border-bottom-style: solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.first-row-item {
+    border-top-width: 3px;
+    border-top-style: solid;
 }
