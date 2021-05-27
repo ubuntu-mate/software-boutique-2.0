@@ -1,7 +1,7 @@
 import json
 import os
 
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QStatusBar
 
 from Widgets.card import Card
 from Widgets.central_widget import CentralWidget
@@ -38,6 +38,12 @@ class MainWindow(QMainWindow):
         self.central_widget = CentralWidget(self)
         self.setCentralWidget(self.central_widget)
 
+        self.status_bar = QStatusBar(self)
+        self.status_label = QLabel("Hello, status bar")
+        self.status_bar.addWidget(self.status_label)
+        self.status_bar.setContentsMargins(10, 10, 10, 10)
+        self.setStatusBar(self.status_bar)
+
     def addListeners(self) -> None:
         self.toolbar.onReturnPressed(self._search)
         self.toolbar.actionTriggered.connect(self._filter)
@@ -47,6 +53,9 @@ class MainWindow(QMainWindow):
             "software-boutique-curated-apps/dist/applications-en.json"
         ) as json_file:
             self.index = json.load(json_file)
+        self.status_bar.removeWidget(self.status_label)
+        self.status_label = QLabel("Software boutique loaded")
+        self.status_bar.addWidget(self.status_label)
 
     def _doSearch(self) -> None:
         def _matches(haystack, needle):
@@ -68,12 +77,16 @@ class MainWindow(QMainWindow):
                 or _matches(package["description"], self.search_term)
             ]
 
-        # self.central_widget.clear()
+        self.status_bar.removeWidget(self.status_label)
+        nb_package = len(packages)
+        l = f"{nb_package} packages found"
+        if 1 == nb_package:
+            l = "1 package found"
+        elif 0 == nb_package:
+            l = "No package found"
 
-        # for package in packages:
-        #     card = Card(package, None)
-        #     self.central_widget.addCard(card)
-        # self.central_widget.addStretch()
+        self.status_label = QLabel(l)
+        self.status_bar.addWidget(self.status_label)
 
         cards = [Card(package, self) for package in packages]
         self.central_widget.addCards(cards)

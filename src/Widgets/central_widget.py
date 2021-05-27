@@ -1,6 +1,5 @@
 from typing import List
-from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QLabel, QLayout, QScrollArea, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from Widgets.card import Card
 
@@ -19,21 +18,6 @@ class CentralWidget(QScrollArea):
 
         self.setWidgetResizable(True)
         self.setWidget(self.scroll_widget)
-        #self.setBackgroundRole(QPalette.Light)
-
-    # def clear(self) -> None:
-    #     while self.scroll_widget_layout.count():
-    #         item = self.scroll_widget_layout.takeAt(0)
-    #         if item and item.widget():
-    #             item.widget().deleteLater()
-    #             self.scroll_widget_layout.removeWidget(item.widget())
-
-    # def addCard(self, widget: Card) -> None:
-    #     widget.setParent(self.scroll_widget)
-    #     self.scroll_widget_layout.addWidget(widget)
-
-    # def addStretch(self) -> None:
-    #     self.scroll_widget_layout.addStretch()
 
     def addCards(self, cards: List[Card]) -> None:
         while self.scroll_widget_layout.count():

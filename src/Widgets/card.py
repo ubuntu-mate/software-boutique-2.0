@@ -1,8 +1,6 @@
 from PyQt5 import QtCore
-from PyQt5 import QtGui
-from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QHBoxLayout, QWidget
 from Widgets.info_panel import InfoPanel
 
 from Widgets.pacakge_icon import PackageIcon
@@ -24,7 +22,7 @@ class Card(QWidget):
         icon = package['icon']
 
         icon_widget = PackageIcon(icon, 20, self)
-        self.info_panel = InfoPanel(package_name, description, self)
+        self.info_panel = InfoPanel(package, description, self)
 
         card_layout = QHBoxLayout()
         card_layout.addWidget(icon_widget, 0, Qt.AlignTop)
@@ -40,6 +38,19 @@ class Card(QWidget):
 
         def showDetails():
             print(f"Showing details for {self.package['name']}")
+            print(f"{self.package}")
+            lic = "Propietary" if self.package['proprietary'] else "Open Source"
+            url = self.package['urls']['info']
+            print(lic)
+            print(url)
 
         self.info_panel.package_buttons.details_button.clicked.connect(
             showDetails)
+
+
+    # Licence : proprietary': False,
+    # arch
+    # Category ???
+    # urls / info
+    # source "ppa = Ubuntu Repository"
+    # Screenshot
