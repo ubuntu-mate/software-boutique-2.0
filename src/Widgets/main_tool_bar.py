@@ -3,8 +3,6 @@ from typing import List
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QToolBar, QWidget
-import qtawesome
-from Application.debug import dump_widget
 
 from Widgets.search_field import SearchField
 from Widgets.spacer import Spacer
