@@ -1,6 +1,6 @@
 from PyQt5.QtCore import QWaitCondition, pyqtSignal
-from PyQt5.QtGui import QPalette
-from PyQt5.QtWidgets import QHBoxLayout, QPushButton, QWidget
+from PyQt5.QtGui import QIcon, QPalette
+from PyQt5.QtWidgets import QHBoxLayout, QMenu, QPushButton, QWidget
 import qtawesome as qta
 
 class PackageButtons(QWidget):
@@ -9,6 +9,7 @@ class PackageButtons(QWidget):
         super().__init__(parent)
 
         text_button_color = QPalette().buttonText().color().name()
+        self.up_arrow_icon: QIcon
         self.up_arrow_icon = qta.icon("fa.angle-double-up", color=text_button_color)
         self.down_arrow_icon = qta.icon("fa.angle-double-down", color=text_button_color)
         self.createComponents()

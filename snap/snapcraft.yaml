@@ -1,1 +1,25 @@
-python3-qtawesome
+name: neoboutique
+base: core20
+version: git
+summary: Software Boutique 2.0
+description: |
+  Software Boutique 2.0
+confinement: strict
+grade: devel
+
+apps:
+  neoboutique:
+    command: usr/bin/launcher
+
+parts:
+  neoboutique:
+    plugin: dump
+    source: src/
+    stage-packages:
+      - python3-qtawesome
+  
+  wrapper:
+    source: files/
+    plugin: dump
+    after:
+      - neoboutique

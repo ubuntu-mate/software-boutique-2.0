@@ -1,7 +1,7 @@
 import json
 import os
 
-from PyQt5.QtWidgets import QHBoxLayout, QLabel, QMainWindow, QStatusBar
+from PyQt5.QtWidgets import QLabel, QMainWindow, QStatusBar
 
 from Widgets.card import Card
 from Widgets.central_widget import CentralWidget
