@@ -1,7 +1,7 @@
 from typing import List
 from PyQt5.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
-from Widgets.card import Card
+from ubuntumate.Widgets.Card.card import Card
 
 
 class CentralWidget(QScrollArea):

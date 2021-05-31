@@ -55,7 +55,19 @@ Card {
     background-color: palette(dark);
 }
 
+.odd-row-item {
+    background-color: palette(light);
+}
+
 .first-row-item {
     border-top: 2px solid palette(text);
-    background-color: palette(light);
+    padding-top: 7px;
+}
+
+.row-item-label {
+    font-weight: 700;
+}
+
+.current-arch {
+    font-weight: 700;
 }

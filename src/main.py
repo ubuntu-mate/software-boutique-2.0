@@ -1,6 +1,4 @@
-from Application.software_boutique import SoftwareBoutique
-
-import sys
+from ubuntumate.software_boutique import SoftwareBoutique
 
 if "__main__" == __name__:
     app = SoftwareBoutique()

@@ -4,14 +4,14 @@ from typing import List
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QToolBar, QWidget
 
-from Widgets.search_field import SearchField
-from Widgets.spacer import Spacer
-from Widgets.toolbar_action import ToolbarAction
+from .search_field import SearchField
+from .spacer import Spacer
+from .toolbar_action import ToolbarAction
 
 
 class MainToolBar(QToolBar):
 
-    actionTriggered = pyqtSignal(bool, str)
+    action_triggered = pyqtSignal(bool, str)
 
     def __init__(self, parent: QWidget) -> None:
         super().__init__("main", parent)
@@ -55,11 +55,11 @@ class MainToolBar(QToolBar):
 
     def addListeners(self) -> None:
         for action in self._actions:
-            action.triggered.connect(
-                partial(self._toolbarActionTriggered, action))
+            action.triggered.connect(partial(self._toolbarActionTriggered, action))
+        self.search_term_edited = self.search_field.textEdited
 
     def _toolbarActionTriggered(self, action: ToolbarAction, checked: bool) -> None:
-        self.actionTriggered.emit(checked, action.category)
+        self.action_triggered.emit(checked, action.category)  # type: ignore
 
     def uncheckButtonsExcept(self, exception: str) -> None:
         for action in self._actions:
