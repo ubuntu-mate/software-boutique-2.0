@@ -1,6 +1,9 @@
 from typing import Dict
+from PyQt5 import QtCore
+from PyQt5.QtGui import QPixmap
 
 from PyQt5.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
+from pkg_resources import resource_filename
 import qtawesome as qta
 
 from ubuntumate.system_state import SystemState
@@ -66,7 +69,7 @@ class DetailsPanel(QWidget):
         layout.addDetails(label, value)
 
         label = QLabel("Website")
-        value = QLabel(f'<a href="{url}">{url}</a>')
+        value = QLabel(f'<a href="{url}" style="color: #87a556;">{url}</a>')
         value.setOpenExternalLinks(True)
         layout.addDetails(label, value)
 
@@ -81,8 +84,7 @@ class DetailsPanel(QWidget):
                 elif "ppa:" == method_source[:4]:
                     user, project = method_source[4:].split("/")
                     link = f'https://launchpad.net/~{user}/+archive/ubuntu/{project}'
-                    print(f"link : {link}")
-                    sources.append(f'<a href="{link}">{method_source}</a>')
+                    sources.append(f'<a href="{link}" style="color: #87a556;">{method_source}</a>')
                 else:
                     sources.append(f"Unknown source {method_source} for method apt/{method_arch}")
             else:
@@ -92,6 +94,21 @@ class DetailsPanel(QWidget):
         value = QLabel(", ".join(sources))
         value.setOpenExternalLinks(True)
         layout.addDetails(label, value)
+
+        if len(self.package['screenshots']):
+            label = QLabel("Screenshots")
+            value = QWidget()
+            sublayout = QHBoxLayout()
+            value.setLayout(sublayout)
+
+            for screenshot in self.package['screenshots']:
+                pixmap = QPixmap(resource_filename('apps', screenshot)).scaled(196, 100, QtCore.Qt.KeepAspectRatio)
+                pixmap_label = QLabel()
+                pixmap_label.setPixmap(pixmap)
+                sublayout.addWidget(pixmap_label)
+            sublayout.addWidget(QWidget(), 1)
+
+            layout.addDetails(label, value)
 
         self.setLayout(layout)
         self.setVisible(False)
