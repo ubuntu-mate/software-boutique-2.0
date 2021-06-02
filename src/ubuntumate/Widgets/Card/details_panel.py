@@ -1,8 +1,10 @@
+from functools import partial
+
 from typing import Dict
 from PyQt5 import QtCore
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QMouseEvent, QPixmap
 
-from PyQt5.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
+from PyQt5.QtWidgets import QBoxLayout, QDial, QDialog, QGridLayout, QHBoxLayout, QLabel, QWidget
 from pkg_resources import resource_filename
 import qtawesome as qta
 
@@ -105,6 +107,7 @@ class DetailsPanel(QWidget):
                 pixmap = QPixmap(resource_filename('apps', screenshot)).scaled(196, 100, QtCore.Qt.KeepAspectRatio)
                 pixmap_label = QLabel()
                 pixmap_label.setPixmap(pixmap)
+                pixmap_label.mousePressEvent = partial(self.pixmapLabelClicked, screenshot)
                 sublayout.addWidget(pixmap_label)
             sublayout.addWidget(QWidget(), 1)
 
@@ -112,6 +115,19 @@ class DetailsPanel(QWidget):
 
         self.setLayout(layout)
         self.setVisible(False)
+
+    def pixmapLabelClicked(self, screenshot: str, ev: QMouseEvent) -> None:
+        print(f"Screenshot: {screenshot}")
+        dlg = QDialog(self)
+        dlg.setModal(True)
+        layout = QHBoxLayout()
+        pixmap = QPixmap(resource_filename('apps', screenshot))
+        pixmap_label = QLabel()
+        pixmap_label.setPixmap(pixmap)
+        layout.addWidget(pixmap_label)
+        dlg.setLayout(layout)
+        dlg.setWindowTitle("Screenshot")
+        dlg.exec_()
 
     def addListeners(self) -> None:
         pass
