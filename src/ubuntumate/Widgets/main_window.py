@@ -1,5 +1,7 @@
+import locale as l18n
+import os
 from typing import Dict
-
+import gettext
 from pkg_resources import resource_string
 from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QLabel, QMainWindow, QStatusBar
@@ -10,12 +12,23 @@ from ubuntumate.Widgets.main_status_bar import MainStatusBar
 from ubuntumate.Workers.load_index_worker import LoadIndexWorker
 from ubuntumate.system_state import SystemState
 
-
 class MainWindow(QMainWindow):
 
     def __init__(self) -> None:
         super().__init__()
 
+        try:
+            locale = l18n.getlocale()[0]
+        except Exception:
+            print("Could not get system locale information! Falling back to 'en_US'.")
+            locale = "en_US"
+        
+        i18n_path = os.path.realpath(os.path.dirname(__file__) + '../../../locales/')
+        localized_catalog = gettext.translation(domain='software-boutique', localedir=i18n_path, languages=[locale], fallback=True)
+        localized_catalog.install()
+        self._ = localized_catalog.gettext
+        self.ngettext = localized_catalog.ngettext
+        
         self.systemState = SystemState()
 
         self.createComponents()
@@ -29,7 +42,7 @@ class MainWindow(QMainWindow):
 
         self.setMinimumSize(width, height)
 
-        self.setWindowTitle("Software Boutique")
+        self.setWindowTitle(self._("Software Boutique"))
         self.setStyleSheet(
             resource_string('assets.css', 'boutique.css').decode('utf8')
         )
@@ -66,7 +79,7 @@ class MainWindow(QMainWindow):
         self.status_bar.setStatus(progress)
 
     def index_loaded(self, index: Dict) -> None:
-        self.status_bar.setStatus("Software boutique loaded")
+        self.status_bar.setStatus(self._("Software boutique loaded"))
         self.index = index
 
     def doSearch(self) -> None:
@@ -94,13 +107,11 @@ class MainWindow(QMainWindow):
 
         nb_package = len(packages)
         if 0 == nb_package:
-            status = "No package found"
-        elif 1 == nb_package:
-            status = "1 package found"
+            status = self._("No package found")
         else:
-            status = f"{nb_package} packages found"
+            status = self.ngettext("1 package found", "{0} packages found", nb_package)
             
-        self.status_bar.setStatus(status)
+        self.status_bar.setStatus(status.format(nb_package))
 
         cards = [Card(package, self.systemState, self) for package in packages]
         self.central_widget.addCards(cards)
